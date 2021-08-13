@@ -1,0 +1,31 @@
+---
+title: "Runoff Volumes"
+author: "Connor Flynn"
+date: "8/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(tidyverse)
+source(here("src", "storm_runoff.R"))
+```
+
+
+```{r}
+impervious_fraction_range <- seq(from = 0.6, to = 0.8, by = 0.01)
+
+predicted_runoff_1 <- predict_runoff(impervious_fraction = impervious_fraction_range, watershed_area = 182)
+
+predicted_runoff_1_df <-data.frame(predicted_runoff_1, impervious_fraction_range)
+
+predicted_runoff_plot <- ggplot(data = predicted_runoff_1_df, aes(x = impervious_fraction_range, y = predicted_runoff_1)) +
+  geom_point() +
+  geom_line()
+
+ggsave(here("figs","predicted_runoff_plot.png"), 
+            plot = predicted_runoff_plot)
+```
+
+
